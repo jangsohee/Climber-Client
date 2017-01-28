@@ -1,7 +1,5 @@
-language: python
-python: 
-  - "3.0"
-install:  
-  
-script:
- 
+language: android
+android: 
+  components:
+jdk:
+ - oraclejdk8
