@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item android:title ="@string/add_following"/>
+        <item android:title ="@string/reco_following"/>
+        <item android:title ="@string/image_search"
+            android:id="@+id/image_search"/>
+        <item android:title ="@string/setting"/>
+    </group>
+</menu>

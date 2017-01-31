@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:id="@+id/iconimage"
+            app:srcCompat="@drawable/down_arrow" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:id="@+id/submenu"
+            android:gravity="center_vertical"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id = "@+id/horizontal_scroll">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id = "@+id/horizontal_list">
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>
