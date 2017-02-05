@@ -22,6 +22,7 @@ import java.util.List;
 public class Comment_Fragment extends Fragment {
 
     private HashMap<Integer,List<String>> cmt_list;
+    TextView text_view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,7 +31,6 @@ public class Comment_Fragment extends Fragment {
         set_cmt_list(v);
         return v;
     }
-
     public void set_cmt_list(View v){
         LayoutInflater infalInflater = (LayoutInflater) this.getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

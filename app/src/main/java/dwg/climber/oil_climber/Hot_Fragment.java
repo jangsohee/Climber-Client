@@ -13,33 +13,82 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
+import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
+
 import java.util.HashMap;
 import java.util.List;
+
+import static dwg.climber.oil_climber.R.id.image_list;
 
 public class Hot_Fragment extends Fragment {
 
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
-
+    View m_view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_hot, container, false);
-        prepareListData();
-        set_hot_data(v);
-        return v;
+        m_view = inflater.inflate(R.layout.fragment_hot, container, false);
+        new Thread(new ThriftRpcCallThread()).start();
+        //prepareListData();
+        //set_hot_data(v);
+        return m_view;
     }
+    class ThriftRpcCallThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                TTransport transport;
 
-    public void set_hot_data(View v){
-        LinearLayout hot_list = (LinearLayout) v.findViewById(R.id.image_list);
+                transport = new TSocket("52.32.4.16", 9090);
+                transport.open();
+
+                TProtocol protocol = new TBinaryProtocol(transport);
+                dwg.climber.oil_climber.Oil.Client client = new dwg.climber.oil_climber.Oil.Client(protocol);
+
+                performThriftRPC(client);
+
+                transport.close();
+            }
+            catch(TException x) {
+                x.printStackTrace();
+            }
+        }
+
+        private void performThriftRPC(dwg.climber.oil_climber.Oil.Client client) throws TException
+        {
+            List<dwg.climber.oil_climber.DailyResult> product = client.hotModule(1);
+            System.out.println("Recieved");
+
+            class OneShotTask implements Runnable {
+                private List product;
+                private OneShotTask(List<dwg.climber.oil_climber.DailyResult> product) { this.product = product; }
+                public void run() {
+                    set_hot_data1(product);
+                }
+            }
+            getActivity().runOnUiThread(new Thread(new OneShotTask(product)));
+        }
+    }
+  /*  public void set_hot_data(View v){
+        LinearLayout hot_list = (LinearLayout) v.findViewById(image_list);
         for(int i=0; i<listDataHeader.size();i++){
-            View view = getGroupView(i);
+            //View view = getGroupView(i);
+            //hot_list.addView(view);
+        }
+    }*/
+    public void set_hot_data1(List<dwg.climber.oil_climber.DailyResult> hot_data){
+        LinearLayout hot_list = (LinearLayout) m_view.findViewById(image_list);
+        for(int i=0; i<hot_data.size();i++){
+            View view = getGroupView1(hot_data.get(i),i);
             hot_list.addView(view);
         }
     }
-
-    public View getGroupView(final int groupPosition) {
+   /* public View getGroupView(int groupPosition) {
         LayoutInflater infalInflater = (LayoutInflater) this.getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = infalInflater.inflate(R.layout.horizontal_list, null);
@@ -50,8 +99,40 @@ public class Hot_Fragment extends Fragment {
 
         List<String> image_list = listDataChild.get(text);
         LinearLayout hot_list = (LinearLayout) convertView.findViewById(R.id.horizontal_list);
+        for (int i = 0; i < image_list.size(); i++) {
+            final String url_i = image_list.get(i);
+            ImageView image_object = new ImageView(this.getActivity());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(250, 250);
+            layoutParams.setMargins(20, 20, 20, 20);
+            image_object.setLayoutParams(layoutParams);
+            Glide.with(this).load(url_i).into(image_object);
+            hot_list.addView(image_object);
+        }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View sub_content= (View) v.findViewById(R.id.horizontal_scroll);
+                if (sub_content.getVisibility()==View.VISIBLE) sub_content.setVisibility(View.GONE);
+                else sub_content.setVisibility(View.VISIBLE);
+            }
+        });
+        return convertView;
+    }*/
+    public View getGroupView1(dwg.climber.oil_climber.DailyResult h_result, int groupPosition) {
+        LayoutInflater infalInflater = (LayoutInflater) this.getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View convertView = infalInflater.inflate(R.layout.horizontal_list, null);
+
+        TextView title = (TextView) convertView.findViewById(R.id.submenu);
+        String text = h_result.getDate();
+        title.setText(text);
+
+        List<String> image_list = h_result.getImgUrl();
+        LinearLayout hot_list = (LinearLayout) convertView.findViewById(R.id.horizontal_list);
+
         for(int i=0;i<image_list.size();i++){
             final String url_i = image_list.get(i);
+
             ImageView image_object = new ImageView(this.getActivity());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(250, 250);
             layoutParams.setMargins(20,20,20,20);
@@ -70,7 +151,7 @@ public class Hot_Fragment extends Fragment {
         return convertView;
     }
 
-    private void prepareListData() {
+/*    private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         // Adding data header
@@ -81,9 +162,9 @@ public class Hot_Fragment extends Fragment {
         List<String> heading1 = new ArrayList<String>();
         List<String> heading2 = new ArrayList<String>();
         List<String> heading3 = new ArrayList<String>();
-        heading1.add("http://image.hankookilbo.com/i.aspx?Guid=5f5962508457411cb1882a0747acb9a0&Month=201603&size=640");
-        heading1.add("http://pds.joins.com/news/component/htmlphoto_mmdata/201603/22/htm_20160322135135248388.jpg");
-        heading1.add("http://scontent.cdninstagram.com/t51.2885-15/e35/12783456_1283039071712777_1483267387_n.jpg?ig_cache_key=MTE5Nzg1MjI1ODM5MDI1OTg2Mw%3D%3D.2");
+        heading1.add("http://image.dcinside.com/viewimage.php?id=3eb7db&no=29bcc427b28677a16fb3dab004c86b6fae7cfdc6a7b48adb3aa3d5df3e70b69ab5f1fead37c29311310e90f1247508d5ffde40be2eabdeac930ef837acf8d3112353");
+        heading1.add("http://dcimg2.dcinside.com/viewimage.php?id=3eb7db&no=29bcc427b28677a16fb3dab004c86b6fae7cfdc6a7b78ad93da3d5df3e70b69a671f3807c912e1e13ab2808aa9d083c5fc2240ba83e32c89d878a3c9ad61e6c3b181");
+        heading1.add("http://image.dcinside.com/viewimage.php?id=3eb7db&no=29bcc427b28677a16fb3dab004c86b6fae7cfdc6a7b48adb39a3d5df3e70f8c7e2eeba9af435d25709f665bb0a890aac59432ee8");
         heading1.add("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTJei137g651k6Nu6Cwd2KaBLTj0nnHOKWab39PO8ao_hUCvN8s");
         heading2.add("http://image.hankookilbo.com/i.aspx?Guid=ab17df059d444b22ad0dc9d57ab2ee0a&Month=201602&size=640");
         heading2.add("http://img.etoday.co.kr/pto_db/2016/04/20160405073228_847993_600_743.jpg");
@@ -96,5 +177,5 @@ public class Hot_Fragment extends Fragment {
         listDataChild.put(listDataHeader.get(0), heading1);
         listDataChild.put(listDataHeader.get(1), heading2);
         listDataChild.put(listDataHeader.get(2), heading3);
-    }
+    }*/
 }
