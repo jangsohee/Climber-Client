@@ -25,6 +25,11 @@
         <activity
             android:name=".Image_Search_Activity"
             android:theme="@style/AppCuteTheme" />
+        <activity
+            android:name=".ImageSlider"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:background="@color/theme">
+            ></activity>
     </application>
 
 </manifest>

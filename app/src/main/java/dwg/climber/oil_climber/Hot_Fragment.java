@@ -1,6 +1,7 @@
 package dwg.climber.oil_climber;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,20 +15,20 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import org.apache.thrift.TException;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
 
-import java.util.HashMap;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import static dwg.climber.oil_climber.R.id.image_list;
 
 public class Hot_Fragment extends Fragment {
 
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    int f_id=1;
     View m_view;
     @Nullable
     @Override
@@ -38,49 +39,83 @@ public class Hot_Fragment extends Fragment {
         //set_hot_data(v);
         return m_view;
     }
+
+
+
     class ThriftRpcCallThread implements Runnable {
+
+        static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+        static final String DB_URL = "jdbc:mysql://dwg-test.ctqok39grnhr.us-west-2.rds.amazonaws.com:3306/example_db";
+
+        static final String USERNAME = "dwg_climber";
+        static final String PASSWORD = "rnrmfzhfldk";
+        List<dwg.climber.oil_climber.DailyResult> hot_result;
+
         @Override
         public void run() {
-            try {
-                TTransport transport;
-
-                transport = new TSocket("52.32.4.16", 9090);
-                transport.open();
-
-                TProtocol protocol = new TBinaryProtocol(transport);
-                dwg.climber.oil_climber.Oil.Client client = new dwg.climber.oil_climber.Oil.Client(protocol);
-
-                performThriftRPC(client);
-
-                transport.close();
-            }
-            catch(TException x) {
-                x.printStackTrace();
-            }
-        }
-
-        private void performThriftRPC(dwg.climber.oil_climber.Oil.Client client) throws TException
-        {
-            List<dwg.climber.oil_climber.DailyResult> product = client.hotModule(1);
-            System.out.println("Recieved");
-
-            class OneShotTask implements Runnable {
-                private List product;
-                private OneShotTask(List<dwg.climber.oil_climber.DailyResult> product) { this.product = product; }
-                public void run() {
-                    set_hot_data1(product);
+            Connection conn = null;
+            Statement stmt = null;
+            try{
+                Class.forName(JDBC_DRIVER);
+                conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+                System.out.println("\n- MySQL Connection");
+                stmt = conn.createStatement();
+                String sql;
+                sql = "select * from f_id_"+f_id;
+                ResultSet rs = stmt.executeQuery(sql);
+                String index = null;
+                hot_result = new ArrayList<>();
+                dwg.climber.oil_climber.DailyResult d_result= new dwg.climber.oil_climber.DailyResult();
+                while(rs.next()){
+                    String time = rs.getDate("time").toString();
+                    if(index == null)
+                        index = time;
+                    else if(!index.equals(time)) {
+                        d_result.setDate(index);
+                        hot_result.add(d_result);
+                        d_result = new dwg.climber.oil_climber.DailyResult();
+                        index=time;
+                    }
+                    d_result.addToImgUrl(rs.getString("url"));
+                }
+                d_result.setDate(index);
+                hot_result.add(d_result);
+                performThriftRPC();
+                stmt.close();
+                conn.close();
+            }catch(SQLException se1){
+                se1.printStackTrace();
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }finally{
+                try{
+                    if(stmt!=null)
+                        stmt.close();
+                }catch(SQLException se2){
+                }
+                try{
+                    if(conn!=null)
+                        conn.close();
+                }catch(SQLException se){
+                    se.printStackTrace();
                 }
             }
-            getActivity().runOnUiThread(new Thread(new OneShotTask(product)));
+
+
+            System.out.println("\n\n- MySQL Connection Close");
+        }
+
+        private void performThriftRPC() throws TException
+        {
+            class OneShotTask implements Runnable {
+                private OneShotTask() {}
+                public void run() {
+                    set_hot_data1(hot_result);
+                }
+            }
+            getActivity().runOnUiThread(new Thread(new OneShotTask()));
         }
     }
-  /*  public void set_hot_data(View v){
-        LinearLayout hot_list = (LinearLayout) v.findViewById(image_list);
-        for(int i=0; i<listDataHeader.size();i++){
-            //View view = getGroupView(i);
-            //hot_list.addView(view);
-        }
-    }*/
     public void set_hot_data1(List<dwg.climber.oil_climber.DailyResult> hot_data){
         LinearLayout hot_list = (LinearLayout) m_view.findViewById(image_list);
         for(int i=0; i<hot_data.size();i++){
@@ -88,37 +123,7 @@ public class Hot_Fragment extends Fragment {
             hot_list.addView(view);
         }
     }
-   /* public View getGroupView(int groupPosition) {
-        LayoutInflater infalInflater = (LayoutInflater) this.getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = infalInflater.inflate(R.layout.horizontal_list, null);
-
-        TextView title = (TextView) convertView.findViewById(R.id.submenu);
-        String text = listDataHeader.get(groupPosition);
-        title.setText(text);
-
-        List<String> image_list = listDataChild.get(text);
-        LinearLayout hot_list = (LinearLayout) convertView.findViewById(R.id.horizontal_list);
-        for (int i = 0; i < image_list.size(); i++) {
-            final String url_i = image_list.get(i);
-            ImageView image_object = new ImageView(this.getActivity());
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(250, 250);
-            layoutParams.setMargins(20, 20, 20, 20);
-            image_object.setLayoutParams(layoutParams);
-            Glide.with(this).load(url_i).into(image_object);
-            hot_list.addView(image_object);
-        }
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                View sub_content= (View) v.findViewById(R.id.horizontal_scroll);
-                if (sub_content.getVisibility()==View.VISIBLE) sub_content.setVisibility(View.GONE);
-                else sub_content.setVisibility(View.VISIBLE);
-            }
-        });
-        return convertView;
-    }*/
-    public View getGroupView1(dwg.climber.oil_climber.DailyResult h_result, int groupPosition) {
+    public View getGroupView1(final dwg.climber.oil_climber.DailyResult h_result, int groupPosition) {
         LayoutInflater infalInflater = (LayoutInflater) this.getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = infalInflater.inflate(R.layout.horizontal_list, null);
@@ -127,17 +132,27 @@ public class Hot_Fragment extends Fragment {
         String text = h_result.getDate();
         title.setText(text);
 
-        List<String> image_list = h_result.getImgUrl();
+        final List<String> image_list = h_result.getImgUrl();
         LinearLayout hot_list = (LinearLayout) convertView.findViewById(R.id.horizontal_list);
 
         for(int i=0;i<image_list.size();i++){
-            final String url_i = image_list.get(i);
 
+            final String url_i = image_list.get(i);
+            final int index = i;
             ImageView image_object = new ImageView(this.getActivity());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(250, 250);
             layoutParams.setMargins(20,20,20,20);
             image_object.setLayoutParams(layoutParams);
             Glide.with(this).load(url_i).into(image_object);
+            image_object.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ImageSlider.class);
+                    intent.putStringArrayListExtra("DailyResult", (ArrayList<String>) image_list);
+                    intent.putExtra("index",index);
+                    startActivity(intent);
+                }
+            });
             hot_list.addView(image_object);
         }
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -151,31 +166,4 @@ public class Hot_Fragment extends Fragment {
         return convertView;
     }
 
-/*    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-        // Adding data header
-        listDataHeader.add("1위-송중기 군대");
-        listDataHeader.add("2위-송중기 송혜교");
-        listDataHeader.add("3위-kbs 연예대상");
-        // Adding child data
-        List<String> heading1 = new ArrayList<String>();
-        List<String> heading2 = new ArrayList<String>();
-        List<String> heading3 = new ArrayList<String>();
-        heading1.add("http://image.dcinside.com/viewimage.php?id=3eb7db&no=29bcc427b28677a16fb3dab004c86b6fae7cfdc6a7b48adb3aa3d5df3e70b69ab5f1fead37c29311310e90f1247508d5ffde40be2eabdeac930ef837acf8d3112353");
-        heading1.add("http://dcimg2.dcinside.com/viewimage.php?id=3eb7db&no=29bcc427b28677a16fb3dab004c86b6fae7cfdc6a7b78ad93da3d5df3e70b69a671f3807c912e1e13ab2808aa9d083c5fc2240ba83e32c89d878a3c9ad61e6c3b181");
-        heading1.add("http://image.dcinside.com/viewimage.php?id=3eb7db&no=29bcc427b28677a16fb3dab004c86b6fae7cfdc6a7b48adb39a3d5df3e70f8c7e2eeba9af435d25709f665bb0a890aac59432ee8");
-        heading1.add("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTJei137g651k6Nu6Cwd2KaBLTj0nnHOKWab39PO8ao_hUCvN8s");
-        heading2.add("http://image.hankookilbo.com/i.aspx?Guid=ab17df059d444b22ad0dc9d57ab2ee0a&Month=201602&size=640");
-        heading2.add("http://img.etoday.co.kr/pto_db/2016/04/20160405073228_847993_600_743.jpg");
-        heading2.add("http://img.tf.co.kr/article/home/2016/03/20/20161640145852493310.jpg");
-        heading2.add("http://image.hankookilbo.com/i.aspx?Guid=a18d122408724ac3826cdecfb84d9684&Month=HKSports&size=640");
-        heading3.add("http://m1.daumcdn.net/thumb/C480x270/70/?fname=http://i1.daumcdn.net/svc/image/U03/tvpot_thumb/s7de8mBfPm2eB2DBmFP2Bqy/thumb.png?t=1483203146440");
-        heading3.add("http://cfile215.uf.daum.net/image/1746D1194B3669FA111D33");
-        heading3.add("https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/121206_%EB%AC%B8%ED%99%94%EC%97%B0%EC%98%88%EB%8C%80%EC%83%81_%EC%86%A1%EC%A4%91%EA%B8%B0.jpg/220px-121206_%EB%AC%B8%ED%99%94%EC%97%B0%EC%98%88%EB%8C%80%EC%83%81_%EC%86%A1%EC%A4%91%EA%B8%B0.jpg");
-        heading3.add("https://i.ytimg.com/vi/EV3sdmvleFE/maxresdefault.jpg");
-        listDataChild.put(listDataHeader.get(0), heading1);
-        listDataChild.put(listDataHeader.get(1), heading2);
-        listDataChild.put(listDataHeader.get(2), heading3);
-    }*/
 }
