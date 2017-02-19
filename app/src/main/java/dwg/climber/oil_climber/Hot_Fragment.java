@@ -61,7 +61,7 @@ public class Hot_Fragment extends Fragment {
                 System.out.println("\n- MySQL Connection");
                 stmt = conn.createStatement();
                 String sql;
-                sql = "select * from f_id_"+f_id;
+                sql = "select * from f_id_"+f_id+" LIMIT 5";
                 ResultSet rs = stmt.executeQuery(sql);
                 String index = null;
                 hot_result = new ArrayList<>();
