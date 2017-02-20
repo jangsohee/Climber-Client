@@ -28,24 +28,30 @@ import static dwg.climber.oil_climber.R.id.image_list;
 
 public class Hot_Fragment extends Fragment {
 
-    int f_id=1;
+    int c_id=3;
     View m_view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         m_view = inflater.inflate(R.layout.fragment_hot, container, false);
         new Thread(new ThriftRpcCallThread()).start();
-        //prepareListData();
-        //set_hot_data(v);
+        View button = (View) m_view.findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout lay = (LinearLayout) m_view.findViewById(R.id.image_list);
+                if(lay.getChildCount() > 0)
+                   lay.removeAllViews();
+                new Thread(new ThriftRpcCallThread()).start();
+            }
+        });
+
         return m_view;
     }
-
-
-
     class ThriftRpcCallThread implements Runnable {
 
         static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-        static final String DB_URL = "jdbc:mysql://dwg-test.ctqok39grnhr.us-west-2.rds.amazonaws.com:3306/example_db";
+        static final String DB_URL = "jdbc:mysql://dwg-test.ctqok39grnhr.us-west-2.rds.amazonaws.com:3306/climber";
 
         static final String USERNAME = "dwg_climber";
         static final String PASSWORD = "rnrmfzhfldk";
@@ -61,7 +67,7 @@ public class Hot_Fragment extends Fragment {
                 System.out.println("\n- MySQL Connection");
                 stmt = conn.createStatement();
                 String sql;
-                sql = "select * from f_id_"+f_id;
+                sql = "select * from Hot where c_id ="+c_id+";";
                 ResultSet rs = stmt.executeQuery(sql);
                 String index = null;
                 hot_result = new ArrayList<>();
