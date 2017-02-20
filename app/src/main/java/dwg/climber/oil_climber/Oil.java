@@ -7,6 +7,9 @@
 package dwg.climber.oil_climber;
 
 import org.apache.thrift.EncodingUtils;
+import org.apache.thrift.ProcessFunction;
+import org.apache.thrift.TBase;
+import org.apache.thrift.meta_data.FieldMetaData;
 import org.apache.thrift.protocol.TTupleProtocol;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
@@ -15,20 +18,20 @@ import org.apache.thrift.scheme.TupleScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collections;
+import java.util.BitSet;
 
 public class Oil {
 
   public interface Iface {
 
-    public ImgSearchResult imgSearch(String img) throws org.apache.thrift.TException;
+    public String imgSearch(String img) throws org.apache.thrift.TException;
 
     public List<DailyResult> hotModule(int f_id) throws org.apache.thrift.TException;
 
@@ -62,7 +65,7 @@ public class Oil {
       super(iprot, oprot);
     }
 
-    public ImgSearchResult imgSearch(String img) throws org.apache.thrift.TException
+    public String imgSearch(String img) throws org.apache.thrift.TException
     {
       send_imgSearch(img);
       return recv_imgSearch();
@@ -75,7 +78,7 @@ public class Oil {
       sendBase("imgSearch", args);
     }
 
-    public ImgSearchResult recv_imgSearch() throws org.apache.thrift.TException
+    public String recv_imgSearch() throws org.apache.thrift.TException
     {
       imgSearch_result result = new imgSearch_result();
       receiveBase(result, "imgSearch");
@@ -148,7 +151,7 @@ public class Oil {
         prot.writeMessageEnd();
       }
 
-      public ImgSearchResult getResult() throws org.apache.thrift.TException {
+      public String getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -195,10 +198,10 @@ public class Oil {
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements org.apache.thrift.TProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Processor.class.getName());
     public Processor(I iface) {
-      super(iface, getProcessMap(new HashMap<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>>()));
+      super(iface, getProcessMap(new HashMap<String, ProcessFunction<I, ? extends TBase>>()));
     }
 
-    protected Processor(I iface, Map<String,  org.apache.thrift.ProcessFunction<I, ? extends  org.apache.thrift.TBase>> processMap) {
+    protected Processor(I iface, Map<String,  ProcessFunction<I, ? extends  TBase>> processMap) {
       super(iface, getProcessMap(processMap));
     }
 
@@ -324,9 +327,9 @@ public class Oil {
     // isset id assignments
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
-      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.IMG, new org.apache.thrift.meta_data.FieldMetaData("img", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.IMG, new org.apache.thrift.meta_data.FieldMetaData("img", org.apache.thrift.TFieldRequirementType.DEFAULT,
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(imgSearch_args.class, metaDataMap);
     }
@@ -335,7 +338,7 @@ public class Oil {
     }
 
     public imgSearch_args(
-      String img)
+            String img)
     {
       this();
       this.img = img;
@@ -385,21 +388,21 @@ public class Oil {
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case IMG:
-        if (value == null) {
-          unsetImg();
-        } else {
-          setImg((String)value);
-        }
-        break;
+        case IMG:
+          if (value == null) {
+            unsetImg();
+          } else {
+            setImg((String)value);
+          }
+          break;
 
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case IMG:
-        return getImg();
+        case IMG:
+          return getImg();
 
       }
       throw new IllegalStateException();
@@ -412,8 +415,8 @@ public class Oil {
       }
 
       switch (field) {
-      case IMG:
-        return isSetImg();
+        case IMG:
+          return isSetImg();
       }
       throw new IllegalStateException();
     }
@@ -532,7 +535,7 @@ public class Oil {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
             break;
           }
           switch (schemeField.id) {
@@ -540,7 +543,7 @@ public class Oil {
               if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
                 struct.img = iprot.readString();
                 struct.setImgIsSet(true);
-              } else { 
+              } else {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
@@ -607,7 +610,7 @@ public class Oil {
   public static class imgSearch_result implements org.apache.thrift.TBase<imgSearch_result, imgSearch_result._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("imgSearch_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -615,7 +618,7 @@ public class Oil {
       schemes.put(TupleScheme.class, new imgSearch_resultTupleSchemeFactory());
     }
 
-    public ImgSearchResult success; // required
+    public String success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -679,8 +682,8 @@ public class Oil {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ImgSearchResult.class)));
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT,
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(imgSearch_result.class, metaDataMap);
     }
@@ -689,7 +692,7 @@ public class Oil {
     }
 
     public imgSearch_result(
-      ImgSearchResult success)
+            String success)
     {
       this();
       this.success = success;
@@ -700,7 +703,7 @@ public class Oil {
      */
     public imgSearch_result(imgSearch_result other) {
       if (other.isSetSuccess()) {
-        this.success = new ImgSearchResult(other.success);
+        this.success = other.success;
       }
     }
 
@@ -713,11 +716,11 @@ public class Oil {
       this.success = null;
     }
 
-    public ImgSearchResult getSuccess() {
+    public String getSuccess() {
       return this.success;
     }
 
-    public imgSearch_result setSuccess(ImgSearchResult success) {
+    public imgSearch_result setSuccess(String success) {
       this.success = success;
       return this;
     }
@@ -739,21 +742,21 @@ public class Oil {
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case SUCCESS:
-        if (value == null) {
-          unsetSuccess();
-        } else {
-          setSuccess((ImgSearchResult)value);
-        }
-        break;
+        case SUCCESS:
+          if (value == null) {
+            unsetSuccess();
+          } else {
+            setSuccess((String)value);
+          }
+          break;
 
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case SUCCESS:
-        return getSuccess();
+        case SUCCESS:
+          return getSuccess();
 
       }
       throw new IllegalStateException();
@@ -766,8 +769,8 @@ public class Oil {
       }
 
       switch (field) {
-      case SUCCESS:
-        return isSetSuccess();
+        case SUCCESS:
+          return isSetSuccess();
       }
       throw new IllegalStateException();
     }
@@ -833,7 +836,7 @@ public class Oil {
 
     public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
-      }
+    }
 
     @Override
     public String toString() {
@@ -854,9 +857,6 @@ public class Oil {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
-      if (success != null) {
-        success.validate();
-      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -889,16 +889,15 @@ public class Oil {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.success = new ImgSearchResult();
-                struct.success.read(iprot);
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.success = iprot.readString();
                 struct.setSuccessIsSet(true);
-              } else { 
+              } else {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
@@ -919,7 +918,7 @@ public class Oil {
         oprot.writeStructBegin(STRUCT_DESC);
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          struct.success.write(oprot);
+          oprot.writeString(struct.success);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -945,7 +944,7 @@ public class Oil {
         }
         oprot.writeBitSet(optionals, 1);
         if (struct.isSetSuccess()) {
-          struct.success.write(oprot);
+          oprot.writeString(struct.success);
         }
       }
 
@@ -954,8 +953,7 @@ public class Oil {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.success = new ImgSearchResult();
-          struct.success.read(iprot);
+          struct.success = iprot.readString();
           struct.setSuccessIsSet(true);
         }
       }
@@ -1040,8 +1038,8 @@ public class Oil {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.F_ID, new org.apache.thrift.meta_data.FieldMetaData("f_id", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32          , "int")));
+      tmpMap.put(_Fields.F_ID, new org.apache.thrift.meta_data.FieldMetaData("f_id", org.apache.thrift.TFieldRequirementType.DEFAULT,
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32          , "int")));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(hotModule_args.class, metaDataMap);
     }
@@ -1050,7 +1048,7 @@ public class Oil {
     }
 
     public hotModule_args(
-      int f_id)
+            int f_id)
     {
       this();
       this.f_id = f_id;
@@ -1100,21 +1098,21 @@ public class Oil {
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case F_ID:
-        if (value == null) {
-          unsetF_id();
-        } else {
-          setF_id((Integer)value);
-        }
-        break;
+        case F_ID:
+          if (value == null) {
+            unsetF_id();
+          } else {
+            setF_id((Integer)value);
+          }
+          break;
 
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case F_ID:
-        return Integer.valueOf(getF_id());
+        case F_ID:
+          return Integer.valueOf(getF_id());
 
       }
       throw new IllegalStateException();
@@ -1127,8 +1125,8 @@ public class Oil {
       }
 
       switch (field) {
-      case F_ID:
-        return isSetF_id();
+        case F_ID:
+          return isSetF_id();
       }
       throw new IllegalStateException();
     }
@@ -1245,7 +1243,7 @@ public class Oil {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
             break;
           }
           switch (schemeField.id) {
@@ -1253,7 +1251,7 @@ public class Oil {
               if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
                 struct.f_id = iprot.readI32();
                 struct.setF_idIsSet(true);
-              } else { 
+              } else {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
@@ -1390,9 +1388,9 @@ public class Oil {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, DailyResult.class))));
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT,
+              new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST,
+                      new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, DailyResult.class))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(hotModule_result.class, metaDataMap);
     }
@@ -1401,7 +1399,7 @@ public class Oil {
     }
 
     public hotModule_result(
-      List<DailyResult> success)
+            List<DailyResult> success)
     {
       this();
       this.success = success;
@@ -1470,21 +1468,21 @@ public class Oil {
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case SUCCESS:
-        if (value == null) {
-          unsetSuccess();
-        } else {
-          setSuccess((List<DailyResult>)value);
-        }
-        break;
+        case SUCCESS:
+          if (value == null) {
+            unsetSuccess();
+          } else {
+            setSuccess((List<DailyResult>)value);
+          }
+          break;
 
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case SUCCESS:
-        return getSuccess();
+        case SUCCESS:
+          return getSuccess();
 
       }
       throw new IllegalStateException();
@@ -1497,8 +1495,8 @@ public class Oil {
       }
 
       switch (field) {
-      case SUCCESS:
-        return isSetSuccess();
+        case SUCCESS:
+          return isSetSuccess();
       }
       throw new IllegalStateException();
     }
@@ -1564,7 +1562,7 @@ public class Oil {
 
     public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
-      }
+    }
 
     @Override
     public String toString() {
@@ -1617,26 +1615,26 @@ public class Oil {
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
-                  org.apache.thrift.protocol.TList _list24 = iprot.readListBegin();
-                  struct.success = new ArrayList<DailyResult>(_list24.size);
-                  for (int _i25 = 0; _i25 < _list24.size; ++_i25)
+                  org.apache.thrift.protocol.TList _list8 = iprot.readListBegin();
+                  struct.success = new ArrayList<DailyResult>(_list8.size);
+                  for (int _i9 = 0; _i9 < _list8.size; ++_i9)
                   {
-                    DailyResult _elem26; // required
-                    _elem26 = new DailyResult();
-                    _elem26.read(iprot);
-                    struct.success.add(_elem26);
+                    DailyResult _elem10; // required
+                    _elem10 = new DailyResult();
+                    _elem10.read(iprot);
+                    struct.success.add(_elem10);
                   }
                   iprot.readListEnd();
                 }
                 struct.setSuccessIsSet(true);
-              } else { 
+              } else {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
@@ -1659,9 +1657,9 @@ public class Oil {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (DailyResult _iter27 : struct.success)
+            for (DailyResult _iter11 : struct.success)
             {
-              _iter27.write(oprot);
+              _iter11.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -1692,9 +1690,9 @@ public class Oil {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (DailyResult _iter28 : struct.success)
+            for (DailyResult _iter12 : struct.success)
             {
-              _iter28.write(oprot);
+              _iter12.write(oprot);
             }
           }
         }
@@ -1706,14 +1704,14 @@ public class Oil {
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TList _list29 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new ArrayList<DailyResult>(_list29.size);
-            for (int _i30 = 0; _i30 < _list29.size; ++_i30)
+            org.apache.thrift.protocol.TList _list13 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new ArrayList<DailyResult>(_list13.size);
+            for (int _i14 = 0; _i14 < _list13.size; ++_i14)
             {
-              DailyResult _elem31; // required
-              _elem31 = new DailyResult();
-              _elem31.read(iprot);
-              struct.success.add(_elem31);
+              DailyResult _elem15; // required
+              _elem15 = new DailyResult();
+              _elem15.read(iprot);
+              struct.success.add(_elem15);
             }
           }
           struct.setSuccessIsSet(true);
