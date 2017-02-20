@@ -28,7 +28,7 @@ import static dwg.climber.oil_climber.R.id.image_list;
 
 public class Hot_Fragment extends Fragment {
 
-    int c_id=3;
+    int c_id=5;
     View m_view;
     @Nullable
     @Override
@@ -39,9 +39,6 @@ public class Hot_Fragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinearLayout lay = (LinearLayout) m_view.findViewById(R.id.image_list);
-                if(lay.getChildCount() > 0)
-                   lay.removeAllViews();
                 new Thread(new ThriftRpcCallThread()).start();
             }
         });
@@ -124,6 +121,8 @@ public class Hot_Fragment extends Fragment {
     }
     public void set_hot_data1(List<dwg.climber.oil_climber.DailyResult> hot_data){
         LinearLayout hot_list = (LinearLayout) m_view.findViewById(image_list);
+        if(hot_list.getChildCount() > 0)
+            hot_list.removeAllViews();
         for(int i=0; i<hot_data.size();i++){
             View view = getGroupView1(hot_data.get(i),i);
             hot_list.addView(view);

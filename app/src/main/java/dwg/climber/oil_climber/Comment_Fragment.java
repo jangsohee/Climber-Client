@@ -9,13 +9,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import org.apache.thrift.TException;
 
@@ -25,10 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import static dwg.climber.oil_climber.R.id.image_list;
 
 public class Comment_Fragment extends Fragment {
 
@@ -43,16 +35,13 @@ public class Comment_Fragment extends Fragment {
         cmt_list = new ArrayList<CmtData>();
         new Thread(new Comments()).start();
 
-        Button syncBtn = (Button) v.findViewById(R.id.sync_button);
+        View syncBtn = (View) v.findViewById(R.id.sync_button);
         syncBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 new Thread(new Comments()).start();
             }
         });
-
-        //prepareData();
-        //set_cmt_list(v);
         return v;
     }
 
