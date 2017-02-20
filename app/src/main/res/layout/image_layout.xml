@@ -28,14 +28,17 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="30dp" />
-
+<!--
     <Button
+        android:id="@+id/sync_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:hapticFeedbackEnabled="true"
-        android:layout_alignParentRight="false"
+        android:background="@drawable/add_following"
+        android:layout_marginRight="30dp"
+        android:layout_alignBottom="@+id/num_recommend"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="30dp"
-        android:background="@drawable/add_following" />
+        android:layout_marginEnd="30dp"
+        /> -->
 </RelativeLayout>

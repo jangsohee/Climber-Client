@@ -9,8 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +42,15 @@ public class Comment_Fragment extends Fragment {
         v = inflater.inflate(R.layout.comment_fragment, container, false);
         cmt_list = new ArrayList<CmtData>();
         new Thread(new Comments()).start();
+
+        Button syncBtn = (Button) v.findViewById(R.id.sync_button);
+        syncBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                new Thread(new Comments()).start();
+            }
+        });
+
         //prepareData();
         //set_cmt_list(v);
         return v;
@@ -64,9 +75,14 @@ public class Comment_Fragment extends Fragment {
                 System.out.println("\n- MySQL Connection");
                 stmt = conn.createStatement();
                 String sql;
-                sql = "SELECT * FROM Comments WHERE c_id=7 ORDER BY cmt_num DESC"; //레드벨벳
+                sql = "SELECT * FROM Comments WHERE c_id=7 GROUP BY comment ORDER BY time DESC";
+                //sql = "SELECT * FROM Comments WHERE c_id=7 AND comment in (SELECT comment FROM Comments GROUP BY comment) ORDER BY time DESC";
+                //sql = "SELECT DISTINCT comment, time, post_id, url Comments WHERE c_id=7 ORDER BY time DESC";
+                //sql = "SELECT DISTINCT comment, time, post_id, url FROM Comments WHERE c_id=7"; //러블리즈, ORDER BY cmt_num DESC
                 ResultSet rs = stmt.executeQuery(sql);
                 dwg.climber.oil_climber.DailyResult d_result= new dwg.climber.oil_climber.DailyResult();
+                cmt_list.clear(); //syncBtn 누르면 clear를 위한
+
                 while(rs.next()){
                     String cmt = rs.getString("comment").toString();
                     String time = rs.getString("time").toString();
@@ -76,6 +92,7 @@ public class Comment_Fragment extends Fragment {
 
                     cmt_list.add(cd);
                 }
+
                 performSet();
                 stmt.close();
                 conn.close();
@@ -109,10 +126,16 @@ public class Comment_Fragment extends Fragment {
             getActivity().runOnUiThread(new Thread(new OneShotTask()));
         }
     }
+
     public void set_cmt_list(View v){
         LayoutInflater infalInflater = (LayoutInflater) this.getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout lay = (LinearLayout) v.findViewById(R.id.comment_lay);
+
+        //syncBtn 누르면 clear를 위한
+        if(((LinearLayout) lay).getChildCount() > 0)
+        ((LinearLayout) lay).removeAllViews();
+
         TextView txt;
         for(int i=0;i<cmt_list.size();i++){
             View convertView = infalInflater.inflate(R.layout.comment_naver, null);
@@ -136,6 +159,7 @@ public class Comment_Fragment extends Fragment {
             });
 
             lay.addView(convertView);
+
         }
     }
     /*
@@ -151,4 +175,5 @@ public class Comment_Fragment extends Fragment {
             cmt_list.put(i,close);
     }
     */
+
 }
