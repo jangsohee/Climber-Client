@@ -28,6 +28,7 @@ public class Comment_Fragment extends Fragment {
 
     TextView text_view;
     View v;
+    int c_id =1;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +44,10 @@ public class Comment_Fragment extends Fragment {
             }
         });
         return v;
+    }
+    public void get_data_from_server(int id){
+        c_id = id;
+        new Thread(new Comments()).start();
     }
 
     class Comments implements Runnable {
@@ -64,7 +69,7 @@ public class Comment_Fragment extends Fragment {
                 System.out.println("\n- MySQL Connection");
                 stmt = conn.createStatement();
                 String sql;
-                sql = "SELECT * FROM Comments WHERE c_id=7 GROUP BY comment ORDER BY time DESC";
+                sql = "SELECT * FROM Comments WHERE c_id="+c_id+" GROUP BY comment ORDER BY time DESC";
                 //sql = "SELECT * FROM Comments WHERE c_id=7 AND comment in (SELECT comment FROM Comments GROUP BY comment) ORDER BY time DESC";
                 //sql = "SELECT DISTINCT comment, time, post_id, url Comments WHERE c_id=7 ORDER BY time DESC";
                 //sql = "SELECT DISTINCT comment, time, post_id, url FROM Comments WHERE c_id=7"; //러블리즈, ORDER BY cmt_num DESC

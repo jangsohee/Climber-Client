@@ -1,13 +1,12 @@
 package dwg.climber.oil_climber;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-
 
 import java.util.ArrayList;
 
@@ -50,7 +49,11 @@ public class FollowingListActivity extends AppCompatActivity implements Followin
                 ListView list = (ListView) parent;
                 FollowingListItem item = (FollowingListItem)list.getItemAtPosition(position);
                 System.out.println(item.getCelebID());
-                Toast.makeText(FollowingListActivity.this, item.getCelebName(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = getIntent();
+                intent.putExtra("c_id", item.getCelebID());
+                setResult(RESULT_OK,intent);
+                finish();
                 // 여기에서 해당 연예인 홈으로 연결되도록
                 // id를 알아내려면 item.getCelebID()
             }

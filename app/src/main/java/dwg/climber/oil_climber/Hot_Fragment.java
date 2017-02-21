@@ -28,7 +28,7 @@ import static dwg.climber.oil_climber.R.id.image_list;
 
 public class Hot_Fragment extends Fragment {
 
-    int c_id=5;
+    int c_id=1;
     View m_view;
     @Nullable
     @Override
@@ -45,7 +45,11 @@ public class Hot_Fragment extends Fragment {
 
         return m_view;
     }
-    class ThriftRpcCallThread implements Runnable {
+    public void get_data_from_server(int id){
+        c_id =id;
+        new Thread(new ThriftRpcCallThread()).start();
+    }
+    public class ThriftRpcCallThread implements Runnable {
 
         static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
         static final String DB_URL = "jdbc:mysql://dwg-test.ctqok39grnhr.us-west-2.rds.amazonaws.com:3306/climber";
@@ -103,8 +107,6 @@ public class Hot_Fragment extends Fragment {
                     se.printStackTrace();
                 }
             }
-
-
             System.out.println("\n\n- MySQL Connection Close");
         }
 
@@ -139,8 +141,9 @@ public class Hot_Fragment extends Fragment {
 
         final List<String> image_list = h_result.getImgUrl();
         LinearLayout hot_list = (LinearLayout) convertView.findViewById(R.id.horizontal_list);
-
-        for(int i=0;i<image_list.size();i++){
+        int count = 20;
+        if(image_list.size()< 20) count = image_list.size();
+        for(int i=0;i<count;i++){
 
             final String url_i = image_list.get(i);
             final int index = i;

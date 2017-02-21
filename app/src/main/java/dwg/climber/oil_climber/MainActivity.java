@@ -1,6 +1,7 @@
 package dwg.climber.oil_climber;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,14 +24,15 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    FragmentPagerItemAdapter adapter;
+    String[] celeb_profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        prepareData_profile(); //c_id 넘겨받아서 해당 셀럽 프로필로 수정하기
-        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+        adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
                 .add(R.string.hot, Hot_Fragment.class)
                 .add(R.string.comment, Comment_Fragment.class)
@@ -40,14 +41,29 @@ public class MainActivity extends AppCompatActivity
         viewPager.setAdapter(adapter);
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
         viewPagerTab.setViewPager(viewPager);
+        Resources res = getResources();
+        celeb_profile= res.getStringArray(R.array.celeb_profile);
+        set_profile_picture(celeb_profile[0]);
     }
 
+    public void set_profile_picture(String url_i){
+        final ImageView img = (ImageView) (findViewById(R.id.image_view));
+        Glide.with(this).load(url_i).asBitmap().centerCrop().into(new BitmapImageViewTarget(img) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                img.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+    }
     public void prepareData_profile(){
         //given data
         //String url_i = "http://image.hankookilbo.com/i.aspx?Guid=5f5962508457411cb1882a0747acb9a0&Month=201603&size=640";
         String url_i = "http://cfile9.uf.tistory.com/T750x750/2519E434561A7AF4291F76";
         int r_num = 13030;
-
+        //set_profile_picture(celeb_profile[0]);
         final ImageView img = (ImageView) (findViewById(R.id.image_view));
         Glide.with(this).load(url_i).asBitmap().centerCrop().into(new BitmapImageViewTarget(img) {
             @Override
@@ -99,11 +115,24 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id == R.id.following_list) {
             Intent i = new Intent(MainActivity.this, FollowingListActivity.class);
-            startActivity(i);
+            startActivityForResult(i, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return false;
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                int c_id = data.getIntExtra("c_id",0);
+                Hot_Fragment hot_fragment = (Hot_Fragment) adapter.getPage(0);
+                hot_fragment.get_data_from_server(c_id);
+                Comment_Fragment comment_fragment = (Comment_Fragment) adapter.getPage(1);
+                comment_fragment.get_data_from_server(c_id);
+                set_profile_picture(celeb_profile[c_id-1]);
+            }
+        }
     }
 }

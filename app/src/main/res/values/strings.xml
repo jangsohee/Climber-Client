@@ -35,4 +35,16 @@
         <item>안재현</item>
     </string-array>
 
+    <string-array name="celeb_profile">
+        <item>https://pbs.twimg.com/profile_images/774948965296975872/halLLUer_reasonably_small.jpg</item>
+        <item>http://img.insight.co.kr/static/2016/12/18/700/168W9LFCC553Y881OI37.jpg</item>
+        <item>https://pbs.twimg.com/media/Cw9BS_zUsAA8Jqq.jpg</item>
+        <item>http://cfile25.uf.tistory.com/image/1310934F4D31CD0A2C3AB5</item>
+        <item>https://ncache.ilbe.com/files/attach/new/20160927/377678/545357680/8813870701/826ab35956da9b40348e0f2fa207e60d.jpg</item>
+        <item>http://cdnticket.melon.co.kr/resource/image/upload/product/2016/04/20160430100122f1f953ee-052c-439d-a77e-e2885301eeb4.jpg</item>
+        <item>https://pbs.twimg.com/media/CDQ960WUMAAxlm4.jpg</item>
+        <item>http://nimage.globaleconomic.co.kr/imagesphp/5/201603191352244511247_20160319135441_01.jpg</item>
+        <item>http://cdn.mydaily.co.kr/FILES/201411/201411171137211129_1.jpg</item>
+        <item>http://img.etnews.com/news/article/2015/02/09/article_09094401726164.jpg</item>
+    </string-array>
 </resources>
