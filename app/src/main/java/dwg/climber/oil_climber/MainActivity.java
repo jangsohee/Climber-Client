@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     public void prepareData_profile(){
         //given data
         //String url_i = "http://image.hankookilbo.com/i.aspx?Guid=5f5962508457411cb1882a0747acb9a0&Month=201603&size=640";
--        String url_i = "http://cfile9.uf.tistory.com/T750x750/2519E434561A7AF4291F76";
+        String url_i = "http://cfile9.uf.tistory.com/T750x750/2519E434561A7AF4291F76";
         int r_num = 13030;
 
         final ImageView img = (ImageView) (findViewById(R.id.image_view));
