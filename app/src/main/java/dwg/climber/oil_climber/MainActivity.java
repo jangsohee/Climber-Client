@@ -22,7 +22,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
-public class  MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,8 @@ public class  MainActivity extends AppCompatActivity
 
     public void prepareData_profile(){
         //given data
-        //String url_i = "http://image.hankookilbo.com/i.aspx?Guid=5f5962508457411cb1882a0747acb9a0&Month=201603&size=640";
-        String url_i = "http://cfile9.uf.tistory.com/T750x750/2519E434561A7AF4291F76";
+        //String url_i = "http://image.hankookilbo.com/i.aspx?Guid=5f5962508457411cb1882a0747acb9a0&Month=201603&size=640";		+        String url_i = "http://image.hankookilbo.com/i.aspx?Guid=5f5962508457411cb1882a0747acb9a0&Month=201603&size=640";
+-        String url_i = "http://cfile9.uf.tistory.com/T750x750/2519E434561A7AF4291F76";
         int r_num = 13030;
 
         final ImageView img = (ImageView) (findViewById(R.id.image_view));
@@ -88,10 +88,20 @@ public class  MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
         if (id == R.id.image_search) {
             Intent i = new Intent(MainActivity.this, Image_Search_Activity.class);
             startActivity(i);
         }
+        else if(id == R.id.add_following) {
+            Intent i = new Intent(MainActivity.this, FollowingActivity.class);
+            startActivity(i);
+        }
+        else if(id == R.id.following_list) {
+            Intent i = new Intent(MainActivity.this, FollowingListActivity.class);
+            startActivity(i);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return false;

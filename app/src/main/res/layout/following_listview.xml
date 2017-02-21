@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <TextView
+        android:id="@+id/following_celeb_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:textSize="20sp"
+        android:gravity="center_vertical"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:focusable="false"/>
+
+    <Button
+        android:id="@+id/delete_following_button"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/border"
+        android:textAlignment="center"
+        android:text="삭제"
+        android:focusableInTouchMode="false"
+        android:focusable="false"/>
+
+</RelativeLayout>

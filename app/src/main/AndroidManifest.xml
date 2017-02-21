@@ -24,6 +24,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".FollowingActivity"
+            android:theme="@style/AppCuteTheme"/>
+        <activity
+            android:name=".FollowingListActivity"
+            android:theme="@style/AppCuteTheme"/>
+        <activity
             android:name=".Image_Search_Activity"
             android:theme="@style/AppCuteTheme" />
         <activity

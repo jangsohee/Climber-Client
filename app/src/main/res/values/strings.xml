@@ -11,7 +11,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="add_following">Following 추가</string>
-    <string name="reco_following">추천 Following</string>
+    <string name="following_list">Following 목록</string>
     <string name="setting">설정</string>
     <string name="image_search">Image Search</string>
 
@@ -22,4 +22,17 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="celeb_array">
+        <item>레드벨벳</item>
+        <item>공유</item>
+        <item>김고은</item>
+        <item>엠버</item>
+        <item>강동원</item>
+        <item>아이오아이</item>
+        <item>러블리즈</item>
+        <item>송중기</item>
+        <item>구혜선</item>
+        <item>안재현</item>
+    </string-array>
+
 </resources>
