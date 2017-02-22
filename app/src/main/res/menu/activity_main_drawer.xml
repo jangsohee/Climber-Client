@@ -6,6 +6,6 @@
             android:id="@+id/following_list"/>
         <item android:title ="@string/image_search"
             android:id="@+id/image_search"/>
-      <!--  <item android:title ="@string/setting"/> -->
+      <!--  <item android:title ="@string/setting"/> -->  
     </group>
 </menu>
